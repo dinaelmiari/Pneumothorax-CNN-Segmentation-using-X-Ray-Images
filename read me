@@ -1,1 +1,115 @@
+🫁 Pneumothorax Segmentation Using CNNs on Chest X-Ray Images
 
+This project focuses on the automatic segmentation of pneumothorax regions in chest X-ray images using a deep learning–based U-Net Convolutional Neural Network (CNN).
+Pneumothorax is a medical emergency where air leaks into the pleural space, causing lung collapse. Fast and reliable detection is essential—especially in hospitals with limited radiology resources.
+
+The goal of this project is to develop a segmentation model that highlights the exact region of pneumothorax on an X-ray, supporting quicker diagnosis and clinical decision-making.
+
+🔬 Method Overview
+
+The project uses the SIIM-ACR Pneumothorax Segmentation dataset (12,047 X-rays + masks) and implements a full pipeline from preprocessing to model training and evaluation.
+
+✔ 1. Data Preprocessing
+
+To prepare the X-rays for segmentation, the following steps were applied:
+
+Convert images to grayscale
+
+Apply CLAHE for contrast enhancement
+
+Use Gaussian blur for denoising
+
+Resize images to 256×256
+
+Normalize pixel values to [0, 1]
+
+Convert masks to binary
+
+Apply morphological post-processing (dilation, erosion, opening, closing)
+
+A balanced subset of affected and unaffected images was selected to address class imbalance.
+
+✔ 2. Segmentation Model: U-Net
+
+A U-Net architecture was designed specifically for medical image segmentation because of its strong performance on pixel-wise tasks.
+
+The structure includes:
+
+Encoder (Contracting Path)
+
+Conv2D + ReLU blocks with L2 regularization
+
+Batch Normalization
+
+MaxPooling for downsampling
+
+Dropout to reduce overfitting (20–50%)
+
+Bottleneck
+
+Deep feature extraction with 512-filter layers
+
+Batch Normalization + 50% Dropout
+
+Decoder (Expanding Path)
+
+Conv2DTranspose for upsampling
+
+Skip connections to the encoder (preserving spatial info)
+
+Dropout + Batch Normalization
+
+Two Conv2D layers per block
+
+Output Layer
+
+1×1 convolution
+
+Sigmoid activation
+
+Generates a binary mask for pneumothorax regions
+
+✔ 3. Training Strategy
+
+The model was trained using:
+
+Adam optimizer (LR = 1e-4)
+
+Combined Dice Loss + Binary Cross-Entropy
+
+Metrics: Dice Coefficient, Mean IoU
+
+Early Stopping, Model Checkpoint, ReduceLROnPlateau, and CSV Logger
+
+Data split:
+
+70% training
+
+15% validation
+
+15% testing
+with stratification to maintain class balance.
+
+✔ 4. Evaluation
+
+The model achieved:
+
+Mean IoU ≈ 0.49
+
+Dice Coefficient ≈ 0.50
+
+Performance is moderate but demonstrates the model’s ability to identify pneumothorax regions and provides a solid baseline for future improvements.
+
+🎯 Goal of the Method
+
+To build a deep learning–based tool that can:
+
+Detect pneumothorax on chest X-rays
+
+Segment the exact affected region
+
+Support radiologists in clinical environments
+
+Provide faster analysis in high-workload or low-resource settings
+
+The method establishes a foundation for more advanced models, such as attention-based or transformer-based segmentation networks.
